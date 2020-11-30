@@ -22,3 +22,8 @@ form {
   display: flex;
   flex-direction: column;
 }
+
+.warning {
+  color: red;
+  padding-top: 2em;
+}

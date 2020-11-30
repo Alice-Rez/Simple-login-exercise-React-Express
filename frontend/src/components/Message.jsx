@@ -1,5 +1,5 @@
 import React from "react";
 
-export default function Message() {
-  return <div></div>;
+export default function Message(props) {
+  return <div>Welcome {props.userInfo.firstName}</div>;
 }

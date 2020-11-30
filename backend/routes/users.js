@@ -12,7 +12,7 @@ const connection = mysql.createConnection({
   host: "localhost",
   port: "3306",
   user: "root",
-  password: "",
+  password: "Password123!",
   database: "users",
 });
 
@@ -39,18 +39,7 @@ router.post("/login", (req, res, next) => {
       }
     }
   );
-
-  // userInfo.map((user) => {
-  //   if (user.email === loginReq.email && user.pwd === loginReq.pwd) {
-  //     userId = user.id;
-  //   }
-  // });
-
-  // if (userId !== false) {
-  //   res.send({ message: "login successful" });
-  // } else {
-  //   res.send({ message: "Incorrect login data, try again." });
-  // }
+  connection.end();
 });
 
 module.exports = router;
