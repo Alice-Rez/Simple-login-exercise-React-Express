@@ -98,7 +98,7 @@ function App() {
           />
         </FormControl>
         <Button variant="contained" color="primary" type="submit">
-          Primary
+          Login
         </Button>
       </form>
     </div>
