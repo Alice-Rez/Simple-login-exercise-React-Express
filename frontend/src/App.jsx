@@ -1,9 +1,12 @@
 import { useState } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import Axios from "axios";
 import Message from "./components/Message";
 import Login from "./components/Login";
 import Warning from "./components/Warning";
+import Registration from "./components/Registration";
+import Navigation from "./components/Navigation";
 
 function App() {
   const [values, setValues] = useState({
@@ -52,19 +55,29 @@ function App() {
 
   return (
     <div className="App">
-      {isLogged ? (
-        <Message userInfo={userInfo} />
-      ) : (
-        <Login
-          handleClickShowPassword={handleClickShowPassword}
-          handleMouseDownPassword={handleMouseDownPassword}
-          getValue={getValue}
-          requestServer={requestServer}
-          values={values}
-          data={data}
-        />
-      )}
-      <Warning message={message} />
+      <Router>
+        <Navigation />
+        <Switch>
+          <Route path="/register">
+            <Registration values={values} />
+          </Route>
+          <Route path="/login">
+            {isLogged ? (
+              <Message userInfo={userInfo} />
+            ) : (
+              <Login
+                handleClickShowPassword={handleClickShowPassword}
+                handleMouseDownPassword={handleMouseDownPassword}
+                getValue={getValue}
+                requestServer={requestServer}
+                values={values}
+                data={data}
+              />
+            )}
+            <Warning message={message} />
+          </Route>
+        </Switch>
+      </Router>
     </div>
   );
 }
