@@ -12,6 +12,7 @@ import {
 import TextField from "@material-ui/core/TextField";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import Axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   margin: {
@@ -24,8 +25,21 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Registration(props) {
   const classes = useStyles();
+
+  const sendData = (e) => {
+    e.preventDefault();
+    const data = new FormData(e.target);
+    Axios({
+      method: "POST",
+      url: "http://localhost:5005/users/register",
+      data: data,
+    })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
+
   return (
-    <form>
+    <form onSubmit={sendData}>
       <h1>Registration</h1>
 
       <TextField
