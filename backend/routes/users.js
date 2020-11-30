@@ -10,25 +10,35 @@ router.get("/", function (req, res, next) {
 
 const connection = mysql.createConnection({
   host: "localhost",
-  port: 3306,
+  port: "3306",
   user: "root",
   password: "",
-  name: "users",
+  database: "users",
 });
 
 router.post("/login", (req, res, next) => {
   console.log(req.body);
   let loginReq = req.body;
   let userId = false;
-  let userInfo;
 
   connection.connect();
-  connection.query("select * from loginInfo;", (err, result, fields) => {
-    if (err) throw err;
-    userInfo = result;
-  });
-
-  console.log(userInfo);
+  connection.query(
+    "select firstName, lastName from loginInfo where (email=? and password=?);",
+    [req.body.email, req.body.pwd],
+    (err, result, fields) => {
+      if (err) {
+        throw err;
+      }
+      if (result.length) {
+        res.send({
+          message: "login successful",
+          userData: result[0],
+        });
+      } else {
+        res.send({ message: "Incorrect login data, try again." });
+      }
+    }
+  );
 
   // userInfo.map((user) => {
   //   if (user.email === loginReq.email && user.pwd === loginReq.pwd) {

@@ -30,6 +30,8 @@ function App() {
   });
   const [data, setData] = useState({});
 
+  const [userInfo, setUserInfo] = useState({});
+
   const handleClickShowPassword = () => {
     setValues({ ...values, showPassword: !values.showPassword });
   };
@@ -50,7 +52,7 @@ function App() {
       url: "http://localhost:5005/users/login",
       data: data,
     })
-      .then((response) => console.log(response))
+      .then((response) => setUserInfo(response.data.userData))
       .catch((err) => console.log(err));
   };
 
