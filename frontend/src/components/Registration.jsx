@@ -13,6 +13,7 @@ import TextField from "@material-ui/core/TextField";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import Axios from "axios";
+import { useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
   margin: {
@@ -25,10 +26,14 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Registration(props) {
   const classes = useStyles();
+  const [data, setData] = useState({});
+
+  const getValue = (e) => {
+    setData({ ...data, [e.target.name]: e.target.value });
+  };
 
   const sendData = (e) => {
     e.preventDefault();
-    const data = new FormData(e.target);
     console.log(data);
     Axios({
       method: "POST",
@@ -50,6 +55,8 @@ export default function Registration(props) {
         variant="outlined"
         type="text"
         name="firstName"
+        value={data.firstName || ""}
+        onInput={getValue}
       />
 
       <TextField
@@ -59,6 +66,8 @@ export default function Registration(props) {
         variant="outlined"
         type="text"
         name="lastName"
+        value={data.lastName || ""}
+        onInput={getValue}
       />
 
       <TextField
@@ -68,6 +77,8 @@ export default function Registration(props) {
         variant="outlined"
         type="email"
         name="email"
+        value={data.email || ""}
+        onInput={getValue}
       />
       <FormControl
         className={clsx(classes.margin, classes.textField)}
@@ -77,7 +88,9 @@ export default function Registration(props) {
         <OutlinedInput
           required
           id="outlined-adornment-password"
-          name="pwd"
+          name="password"
+          value={data.password || ""}
+          onInput={getValue}
           type={props.values.showPassword ? "text" : "password"}
           endAdornment={
             <InputAdornment position="end">
