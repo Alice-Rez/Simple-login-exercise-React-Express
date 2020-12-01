@@ -29,6 +29,7 @@ export default function Registration(props) {
   const sendData = (e) => {
     e.preventDefault();
     const data = new FormData(e.target);
+    console.log(data);
     Axios({
       method: "POST",
       url: "http://localhost:5005/users/register",

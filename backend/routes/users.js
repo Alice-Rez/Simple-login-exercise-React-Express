@@ -8,12 +8,12 @@ router.get("/", function (req, res, next) {
   res.send("respond with a resource");
 });
 
-const connection = mysql.createPool({
-  connectionLimit: 100,
+const connection = mysql.createConnection({
+  // connectionLimit: 100,
   host: "localhost",
   port: "3306",
   user: "root",
-  password: "",
+  password: "Password123!",
   database: "users",
 });
 
@@ -24,10 +24,9 @@ router.post("/login", (req, res, next) => {
 
   // connection.connect();
   connection.query(
-    "select firstName, lastName from loginInfo where (email=? and password=?);",
+    "select firstName, lastName from loginInfo where email=? and password=?;",
     [req.body.email, req.body.pwd],
     (err, result, fields) => {
-      connection.release();
       if (err) {
         throw err;
       }
@@ -39,6 +38,7 @@ router.post("/login", (req, res, next) => {
       } else {
         res.send({ message: "Incorrect login data, try again." });
       }
+      connection.end();
     }
   );
 });
