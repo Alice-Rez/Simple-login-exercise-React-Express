@@ -8,8 +8,8 @@ router.get("/", function (req, res, next) {
   res.send("respond with a resource");
 });
 
-const connection = mysql.createConnection({
-  // connectionLimit: 100,
+const pool = mysql.createPool({
+  connectionLimit: 100,
   host: "localhost",
   port: "3306",
   user: "root",
@@ -20,27 +20,47 @@ const connection = mysql.createConnection({
 router.post("/login", (req, res, next) => {
   console.log(req.body);
   let loginReq = req.body;
-  let userId = false;
+
+  pool.getConnection((err, con) => {
+    if (err) throw err;
+    con.query(
+      "select firstName, lastName from loginInfo where email=? and password=?;",
+      [req.body.email, req.body.pwd],
+      (err, result, fields) => {
+        if (err) {
+          throw err;
+        }
+        if (result.length) {
+          res.send({
+            message: "login successful",
+            userData: result[0],
+          });
+        } else {
+          res.send({ message: "Incorrect login data, try again." });
+        }
+      }
+    );
+    con.release();
+  });
 
   // connection.connect();
-  connection.query(
-    "select firstName, lastName from loginInfo where email=? and password=?;",
-    [req.body.email, req.body.pwd],
-    (err, result, fields) => {
-      if (err) {
-        throw err;
-      }
-      if (result.length) {
-        res.send({
-          message: "login successful",
-          userData: result[0],
-        });
-      } else {
-        res.send({ message: "Incorrect login data, try again." });
-      }
-      connection.end();
-    }
-  );
+  // connection.query(
+  //   "select firstName, lastName from loginInfo where email=? and password=?;",
+  //   [req.body.email, req.body.pwd],
+  //   (err, result, fields) => {
+  //     if (err) {
+  //       throw err;
+  //     }
+  //     if (result.length) {
+  //       res.send({
+  //         message: "login successful",
+  //         userData: result[0],
+  //       });
+  //     } else {
+  //       res.send({ message: "Incorrect login data, try again." });
+  //     }
+  //   }
+  // );
 });
 
 router.post("/register", (req, res, next) => {
