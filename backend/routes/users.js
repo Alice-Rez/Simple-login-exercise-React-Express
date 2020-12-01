@@ -25,7 +25,7 @@ router.post("/login", (req, res, next) => {
     if (err) throw err;
     con.query(
       "select firstName, lastName from loginInfo where email=? and password=?;",
-      [req.body.email, req.body.pwd],
+      [loginReq.email, loginReq.pwd],
       (err, result, fields) => {
         if (err) {
           throw err;
@@ -42,30 +42,26 @@ router.post("/login", (req, res, next) => {
     );
     con.release();
   });
-
-  // connection.connect();
-  // connection.query(
-  //   "select firstName, lastName from loginInfo where email=? and password=?;",
-  //   [req.body.email, req.body.pwd],
-  //   (err, result, fields) => {
-  //     if (err) {
-  //       throw err;
-  //     }
-  //     if (result.length) {
-  //       res.send({
-  //         message: "login successful",
-  //         userData: result[0],
-  //       });
-  //     } else {
-  //       res.send({ message: "Incorrect login data, try again." });
-  //     }
-  //   }
-  // );
 });
 
 router.post("/register", (req, res, next) => {
-  console.log(req.body);
-  res.end();
+  let regData = req.body;
+
+  pool.getConnection((err, con) => {
+    if (err) throw err;
+    con.query(
+      "insert into loginInfo values(null,?, ?, ?, ?);",
+      [regData.firstName, regData.lastName, regData.email, regData.password],
+      (err, result, fields) => {
+        if (err) {
+          throw err;
+        }
+      }
+    );
+    con.release();
+  });
+
+  res.send("registration was successful");
 });
 
 module.exports = router;
